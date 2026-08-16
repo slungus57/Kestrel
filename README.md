@@ -8,7 +8,9 @@
 [![Target](https://img.shields.io/badge/Target-Sober%20%2F%20SDI2-blue)](https://github.com/slungus57/Kestrel)
 [![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
 
-⚠️ *REMINDER!* This project is fully vibecoded and was inspired by this reddit post. [OG post here](https://www.reddit.com/r/robloxhackers/comments/1vpxpxk/i_made_a_linux_tool_for_roblox_that_lets_you_afk/)
+⚠️ *REMINDER!* This project is fully vibecoded and was inspired by this reddit post. [OG post here]
+❔ *Compatibility* This project may work on Roblox revivals aswell, although it is not guaranteed.
+(https://www.reddit.com/r/robloxhackers/comments/1vpxpxk/i_made_a_linux_tool_for_roblox_that_lets_you_afk/)
 
 Kestrel is a terminal-only Windows utility that periodically performs configurable OS-level keyboard actions. It uses `pynput` for normal keyboard input and does not inject into Roblox, inspect Roblox memory, modify Roblox files, hook game internals, or manipulate network traffic.
 
