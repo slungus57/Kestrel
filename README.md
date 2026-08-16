@@ -1,6 +1,11 @@
 # Kestrel
 
 **Keep your Roblox window awake.**
+[![Release](https://img.shields.io/badge/release-v1.0.0-0d8dcc)](https://github.com/slungus57/Kestrel/releases)
+[![Python](https://img.shields.io/badge/Python-3.8%2B-blue?logo=python&logoColor=white)](https://www.python.org/)
+[![Platform](https://img.shields.io/badge/Platform-Windows-blue?logo=windows&logoColor=white)](https://www.microsoft.com/windows/)
+[![Target](https://img.shields.io/badge/Target-Sober%20%2F%20SDI2-blue)](https://github.com/slungus57/Kestrel)
+[![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
 
 ⚠️ *REMINDER!* This project is fully vibecoded and was inspired by this reddit post. [OG post here](https://www.reddit.com/r/robloxhackers/comments/1vpxpxk/i_made_a_linux_tool_for_roblox_that_lets_you_afk/)
 
