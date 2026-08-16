@@ -1,6 +1,7 @@
 # Kestrel
 
 **Keep your Roblox window awake.**
+
 [![Release](https://img.shields.io/badge/release-v1.0.0-0d8dcc)](https://github.com/slungus57/Kestrel/releases)
 [![Python](https://img.shields.io/badge/Python-3.8%2B-blue?logo=python&logoColor=white)](https://www.python.org/)
 [![Platform](https://img.shields.io/badge/Platform-Windows-blue?logo=windows&logoColor=white)](https://www.microsoft.com/windows/)
