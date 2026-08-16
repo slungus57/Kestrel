@@ -1,23 +1,19 @@
 {
     "enabled": false,
-    "interval": 5,
-    "randomization": 0,
+    "interval": 600,
+    "randomization": 10,
     "actions": [
         {
             "key": "w",
-            "duration": 0.5
-        },
-        {
-            "key": "a",
-            "duration": 0.5
+            "duration": 1.0
         },
         {
             "key": "s",
-            "duration": 0.5
+            "duration": 1.0
         },
         {
-            "key": "d",
-            "duration": 0.5
+            "key": "space",
+            "duration": 0.2
         }
     ],
     "target_window": "Roblox"
