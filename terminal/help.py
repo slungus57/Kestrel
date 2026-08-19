@@ -4,7 +4,6 @@ from rich.console import Console, Group
 from rich.panel import Panel
 from rich.text import Text
 
-from .styles import GREEN, TEXT, SECONDARY, DIM
 
 
 def config_help(console: Console, config_path: str) -> None:
@@ -61,7 +60,7 @@ def config_help(console: Console, config_path: str) -> None:
     for value, style in lines:
         text.append(value + "\n", style=style)
     console.clear()
-    console.print(Panel(text, border_style=GREEN, padding=(1, 2), title="[kestrel]CONFIGURATION GUIDE[/kestrel]"))
+    console.print(Panel(text, border_style="kestrel", padding=(1, 2), title="[kestrel]CONFIGURATION GUIDE[/kestrel]"))
 
 
 def info_screen(console: Console, config_path: str) -> None:
@@ -74,7 +73,8 @@ def info_screen(console: Console, config_path: str) -> None:
         ("X", "Stop automation"),
         ("R", "Reload config.json"),
         ("O", "Open config.json in the default editor"),
-        ("I", "Open this configuration guide"),
+        ("T", "Open the theme menu"),
+        ("I", "Open the info screen"),
         ("L", "Open the activity log"),
         ("Q", "Quit safely"),
         ("F8", "Global active/inactive toggle"),
@@ -94,7 +94,7 @@ def info_screen(console: Console, config_path: str) -> None:
             text.append(f"{key:<16}", style="kestrel")
             text.append(f"{value}\n", style="text")
     console.clear()
-    console.print(Panel(text, border_style=GREEN, padding=(1, 2), title="[kestrel]INFO[/kestrel]"))
+    console.print(Panel(text, border_style="kestrel", padding=(1, 2), title="[kestrel]INFO[/kestrel]"))
 
 
 def activity_screen(console: Console, events: list[str]) -> None:
@@ -107,4 +107,4 @@ def activity_screen(console: Console, events: list[str]) -> None:
     else:
         body.append("No activity yet.\n", style="secondary")
     body.append("\nPress B or Esc to return.", style="dimtext")
-    console.print(Panel(body, border_style=GREEN, padding=(1, 2), title="[kestrel]ACTIVITY[/kestrel]"))
+    console.print(Panel(body, border_style="kestrel", padding=(1, 2), title="[kestrel]ACTIVITY[/kestrel]"))

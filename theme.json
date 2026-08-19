@@ -1,0 +1,14 @@
+{
+    "name": "Natural Green",
+    "colors": {
+        "primary": "#6FAF72",
+        "bright": "#91C995",
+        "soft": "#557F59",
+        "text": "#D9E2DA",
+        "secondary": "#9BA89D",
+        "dim": "#566158",
+        "warning": "#C8A85B",
+        "error": "#C96A67",
+        "success": "#7FBC82"
+    }
+}

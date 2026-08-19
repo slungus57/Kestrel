@@ -14,13 +14,18 @@ from datetime import datetime
 from rich.live import Live
 from rich.panel import Panel
 from rich.console import Console
+from rich.text import Text
 
 from core.automation import AutomationEngine
 from core.config import ConfigError, KestrelConfig, load_config
 from core.hotkeys import HotkeyManager
 from terminal.dashboard import Dashboard
 from terminal.help import activity_screen, config_help, info_screen
-from terminal.styles import CONSOLE, GREEN, ERROR, TEXT
+from terminal.theme_menu import theme_screen
+from terminal.styles import CONSOLE, ERROR
+from terminal.themes import PRESETS, ThemeManager, ThemeError
+
+PRESET_KEYS = set(PRESETS.keys())
 
 
 class KestrelApp:
@@ -28,6 +33,8 @@ class KestrelApp:
         self.console = CONSOLE
         self.config_path = config_path.resolve()
         self.config: KestrelConfig | None = None
+        self.theme_manager = ThemeManager(self.config_path.parent / "theme.json")
+        self._theme_status: str | None = None
         self.recent_events: deque[str] = deque(maxlen=100)
         self._events_lock = threading.RLock()
         self._state_lock = threading.RLock()
@@ -49,6 +56,9 @@ class KestrelApp:
             error_callback=self._hotkey_error,
         )
         self.dashboard = Dashboard(self)
+        theme_ok, theme_error = self.theme_manager.load()
+        if not theme_ok:
+            self._theme_status = f"✗ Theme load failed: {theme_error}"
 
     def get_config(self) -> KestrelConfig:
         with self._state_lock:
@@ -146,6 +156,10 @@ class KestrelApp:
     def show_log(self):
         self._view = "log"
 
+    def show_theme(self):
+        self._theme_status = None
+        self._view = "theme"
+
     def show_dashboard(self):
         self._view = "dashboard"
 
@@ -174,6 +188,12 @@ class KestrelApp:
                 time.sleep(0.03)
                 continue
             key = char.lower()
+            if self._view.startswith("theme-static"):
+                if key == "q":
+                    self.quit()
+                else:
+                    self._handle_theme_key(key, char)
+                continue
             if key == "s":
                 self.start()
             elif key == "p":
@@ -188,10 +208,42 @@ class KestrelApp:
                 self.show_log()
             elif key == "o":
                 self.open_config()
+            elif key == "t":
+                self.show_theme()
             elif key == "q":
                 self.quit()
             elif key == "b" or char == "\x1b":
                 self.show_dashboard()
+
+    def _handle_theme_key(self, key: str, raw_char: str) -> None:
+        if key in PRESET_KEYS:
+            try:
+                name = self.theme_manager.use_preset(key)
+                self._theme_status = f"✓ Applied {name}"
+                self.log_event(f"Theme changed to {name}")
+            except ThemeError as exc:
+                self._theme_status = f"✗ {exc}"
+            self._view = "theme"
+            return
+        if key == "r":
+            name = self.theme_manager.reset()
+            self._theme_status = f"✓ Reset to {name}"
+            self.log_event(f"Theme reset to {name}")
+            self._view = "theme"
+            return
+        if key == "c":
+            ok, message = self.theme_manager.open_custom_editor()
+            if ok:
+                self._theme_status = f"✓ Loaded {self.theme_manager.name}"
+                self.log_event(f"Custom theme loaded: {self.theme_manager.name}")
+            else:
+                self._theme_status = f"✗ Theme reload failed: {message}"
+                self.log_event(f"Theme reload failed: {message}")
+            self._view = "theme"
+            return
+        if key == "b" or raw_char == "\x1b":
+            self._theme_status = None
+            self.show_dashboard()
 
     def start_input(self):
         self._input_thread = threading.Thread(
@@ -263,7 +315,10 @@ class KestrelApp:
                     live.stop()
                     live_started = False
 
-                if self._view == "info":
+                if self._view == "theme":
+                    theme_screen(self.console, self.theme_manager, self._theme_status)
+                    self._view = "theme-static"
+                elif self._view == "info":
                     info_screen(self.console, str(self.config_path))
                     self._view = "info-static"
                 elif self._view == "help":
@@ -301,7 +356,9 @@ class KestrelApp:
         self.hotkeys.stop()
         self.log_event("Kestrel shut down")
         self.console.clear()
-        self.console.print("KESTREL", style="kestrel bold")
+        shutdown_title = Text("KESTREL", style="kestrel")
+        shutdown_title.stylize("bold")
+        self.console.print(shutdown_title)
         self.console.print("Clean shutdown complete.", style="success")
 
 

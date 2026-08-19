@@ -2,7 +2,6 @@
     "enabled": false,
     "interval": 600,
     "randomization": 0,
-    "background": true,
     "actions": [
         {
             "key": "w",

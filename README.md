@@ -2,15 +2,6 @@
 
 **Keep your Roblox window awake.**
 
-[![Release](https://img.shields.io/badge/release-v1.0.0-0d8dcc)](https://github.com/slungus57/Kestrel/releases)
-[![Python](https://img.shields.io/badge/Python-3.8%2B-blue?logo=python&logoColor=white)](https://www.python.org/)
-[![Platform](https://img.shields.io/badge/Platform-Windows-blue?logo=windows&logoColor=white)](https://www.microsoft.com/windows/)
-[![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
-
-⚠️ ***REMINDER*** This project is fully vibecoded and was inspired by this reddit post. [OG post here](https://www.reddit.com/r/robloxhackers/comments/1vpxpxk/i_made_a_linux_tool_for_roblox_that_lets_you_afk/)
-
-❔ ***Compatibility*** This project may work on Roblox revivals aswell, although it is not guaranteed.
-
 Kestrel is a terminal-only Windows utility that periodically performs configurable OS-level keyboard actions. It uses `pynput` for normal keyboard input and does not inject into Roblox, inspect Roblox memory, modify Roblox files, hook game internals, or manipulate network traffic.
 
 ## Requirements
@@ -160,12 +151,30 @@ Letters `a-z`, digits `0-9`, plus:
 - `I` — information
 - `L` — activity log
 - `O` — open `config.json`
+- `T` — theme menu
 - `Q` — quit
 
 ### Global hotkeys
 
 - `F8` — toggle active/inactive
 - `F9` — emergency stop and release held keys
+
+## Themes
+
+Press `T` from the dashboard to open the terminal theme menu. Changes apply immediately and are saved to `theme.json`.
+
+Built-in themes:
+
+- Natural Green
+- Forest
+- Ocean Blue
+- Warm Amber
+- Rosewood
+- Monochrome
+
+Choose `C` in the theme menu to open `theme.json` in the default Windows text editor and customize every palette color using `#RRGGBB` values. Close the editor and Kestrel reloads the theme automatically.
+
+`R` restores the default Natural Green palette. The terminal's physical background color remains controlled by the terminal emulator; Kestrel customizes its text, status, borders, and accents.
 
 ## Configuration reload
 

@@ -13,18 +13,7 @@ from rich.panel import Panel
 from rich.table import Table
 from rich.text import Text
 
-from .styles import (
-    BLACK,
-    BRIGHT_GREEN,
-    CONSOLE,
-    DIM,
-    GREEN,
-    SECONDARY,
-    SUCCESS,
-    TEXT,
-    WARNING,
-    ERROR,
-)
+from .styles import CONSOLE
 
 
 def format_seconds(seconds: float) -> str:
@@ -61,14 +50,14 @@ def make_section(title: str, body: RenderableType, *, height: int | None = None)
     return Panel(
         body,
         title=f"[kestrel]{title}[/kestrel]",
-        border_style=SOFT_BORDER(title),
+        border_style="kestrel",
         padding=(0, 1),
         height=height,
     )
 
 
 def SOFT_BORDER(_title: str) -> str:
-    return GREEN
+    return "kestrel"
 
 
 def kv_table(rows: list[tuple[str, str]], value_style: str = "text") -> Table:
@@ -108,7 +97,8 @@ class Dashboard:
         header = Table.grid(expand=True)
         header.add_column()
         header.add_column(justify="right")
-        title = Text("KESTREL", style="kestrel bold")
+        title = Text("KESTREL", style="kestrel")
+        title.stylize("bold")
         subtitle = Text("Keep your Roblox window awake", style="secondary")
         header.add_row(title, Text.from_markup(f"[{status_style}]{status}[/{status_style}]"))
         header.add_row(subtitle, Text(f"Cycle #{snap.cycle:03d}", style="dimtext"))
@@ -143,7 +133,7 @@ class Dashboard:
         countdown = format_countdown(remaining)
 
         countdown_group = Group(
-            Align.center(Text(countdown, style="bright_kestrel bold", justify="center")),
+            Align.center(Text(countdown, style="bright_kestrel", justify="center")),
             Align.center(bar),
             Align.center(
                 Text(
@@ -170,27 +160,43 @@ class Dashboard:
         controls = Text()
         for key, label in [
             ("S", "Start"), ("P", "Pause"), ("X", "Stop"), ("R", "Reload"),
-            ("I", "Info"), ("L", "Log"), ("O", "Config"), ("Q", "Quit"),
+            ("I", "Info"), ("L", "Log"), ("O", "Config"), ("T", "Theme"), ("Q", "Quit"),
         ]:
-            controls.append(f"[{key}]", style="kestrel bold")
+            controls.append(f"[{key}]", style="kestrel")
             controls.append(f" {label}  ", style="secondary")
+
+        # Rich will clip a single Text renderable when the terminal becomes
+        # narrower than its content. Wrap the controls using the actual
+        # terminal width so they reflow instead of disappearing off-screen.
+        controls_width = max(18, self.app.console.width - 8)
+        control_lines = controls.wrap(self.app.console, width=controls_width)
+        wrapped_controls = Group(*control_lines)
+        controls_height = max(3, len(control_lines) + 2)
 
         top = Layout(name="top", size=8)
         top.split_row(
-            Layout(Panel(header, border_style=DIM, padding=(0, 1)), ratio=1),
-            Layout(Panel(activity_body, title="[kestrel]CURRENT ACTIVITY[/kestrel]", border_style=GREEN, padding=(0, 1)), ratio=1),
+            Layout(Panel(header, border_style="dimtext", padding=(0, 1)), ratio=1),
+            Layout(Panel(activity_body, title="[kestrel]CURRENT ACTIVITY[/kestrel]", border_style="kestrel", padding=(0, 1)), ratio=1),
         )
 
         middle = Layout(name="middle", minimum_size=10)
         middle.split_row(
-            Layout(Panel(config_body, title="[kestrel]CONFIGURATION[/kestrel]", border_style=GREEN, padding=(0, 1)), ratio=1),
-            Layout(Panel(countdown_group, title="[kestrel]NEXT CYCLE[/kestrel]", border_style=GREEN, padding=(0, 1)), ratio=1),
+            Layout(Panel(config_body, title="[kestrel]CONFIGURATION[/kestrel]", border_style="kestrel", padding=(0, 1)), ratio=1),
+            Layout(Panel(countdown_group, title="[kestrel]NEXT CYCLE[/kestrel]", border_style="kestrel", padding=(0, 1)), ratio=1),
         )
 
-        bottom = Layout(name="bottom", size=9)
+        bottom = Layout(name="bottom", size=max(9, 7 + controls_height))
         bottom.split_column(
-            Layout(Panel(log_table, title="[kestrel]ACTIVITY[/kestrel]", border_style=GREEN, padding=(0, 1)), ratio=1),
-            Layout(Panel(Align.center(controls), title="[kestrel]CONTROLS[/kestrel]", border_style=DIM, padding=(0, 0), height=3)),
+            Layout(Panel(log_table, title="[kestrel]ACTIVITY[/kestrel]", border_style="kestrel", padding=(0, 1)), ratio=1),
+            Layout(
+                Panel(
+                    Align.center(wrapped_controls, vertical="middle"),
+                    title="[kestrel]CONTROLS[/kestrel]",
+                    border_style="dimtext",
+                    padding=(0, 1),
+                    height=controls_height,
+                )
+            ),
         )
 
         root = Layout()

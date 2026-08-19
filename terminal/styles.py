@@ -28,7 +28,6 @@ THEME = Theme({
 
 CONSOLE = Console(theme=THEME, color_system="truecolor", highlight=False)
 
-
 WORDMARK = r""" /$$   /$$                       /$$                         /$$
 | $$  /$$/                      | $$                        | $$
 | $$ /$$/   /$$$$$$   /$$$$$$$ /$$$$$$    /$$$$$$   /$$$$$$ | $$
